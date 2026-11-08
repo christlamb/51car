@@ -19,8 +19,8 @@ void Delay(unsigned int xms)
 	unsigned char i, j;
 	while(xms--)
 	{
-		i = 11;
-		j = 190;
+		i = 2;
+		j = 201;
 		do
 		{
 			while (--j);
@@ -324,7 +324,7 @@ void renwu4()			//任务4：超声波避障
 				LED=1;
 				Delay(100);
 				chaoshengbo();
-				if(juli>30)	//障碍移除，继续
+				if(juli>30)	//障碍移除继续
 				{
 					Speed=100;
 					break;

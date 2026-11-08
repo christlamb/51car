@@ -1,0 +1,449 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 16:30:40 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\software\Keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          
+   3          sbit MotorR=P1^2; //右电机
+   4          sbit MotorL=P1^3; //左电机
+   5          sbit fmq=P1^0;    //蜂鸣器
+   6          sbit LED=P1^1;    //LED
+   7          sbit Trig=P2^0;   //超声波Trig
+   8          sbit Echo=P2^1;   //超声波Echo
+   9          
+  10          unsigned char Counter,CompareR,CompareL;  //PWM计数值和左右比较值
+  11          unsigned char KeyNum,Speed;     //按键号、速度
+  12          int quanshu=1;          //圈数
+  13          unsigned char juli;       //超声波距离，cm
+  14          bit likai;          //已离开A点
+  15          bit tingguo;          //已等停过
+  16          
+  17          void Delay(unsigned int xms)
+  18          {
+  19   1        unsigned char i, j;
+  20   1        while(xms--)
+  21   1        {
+  22   2          i = 2;
+  23   2          j = 201;
+  24   2          do
+  25   2          {
+  26   3            while (--j);
+  27   3          } while (--i);
+  28   2        }
+  29   1      }
+  30          
+  31          //键1~4：P2_7、P2_6、P2_5、P2_4
+  32          unsigned char Key()
+  33          {
+  34   1        unsigned char KeyNumber=0;
+  35   1        
+  36   1        if(P2_7==0){Delay(20);while(P2_7==0);Delay(20);KeyNumber=1;}
+  37   1        if(P2_6==0){Delay(20);while(P2_6==0);Delay(20);KeyNumber=2;}
+  38   1        if(P2_5==0){Delay(20);while(P2_5==0);Delay(20);KeyNumber=3;}
+  39   1        if(P2_4==0){Delay(20);while(P2_4==0);Delay(20);KeyNumber=4;}
+  40   1        
+  41   1        return KeyNumber;
+  42   1      }
+  43          
+  44          //定时器0，100us@11.0592MHz
+  45          void Timer0_Init()
+  46          {
+  47   1        TMOD &= 0xF0;
+  48   1        TMOD |= 0x01;
+  49   1        TL0 = 0x9C;
+  50   1        TH0 = 0xFF;
+  51   1        TF0 = 0;
+  52   1        TR0 = 1;
+  53   1        ET0=1;
+  54   1        EA=1;
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 16:30:40 PAGE 2   
+
+  55   1        PT0=0;
+  56   1      }
+  57          
+  58          void fengmingqi()   //长鸣1声
+  59          {
+  60   1        fmq=0;
+  61   1        Delay(1000);
+  62   1        fmq=1;
+  63   1      }
+  64          
+  65          void duanming()     //短鸣1声
+  66          {
+  67   1        fmq=0;
+  68   1        Delay(100);
+  69   1        fmq=1;
+  70   1      }
+  71          
+  72          void shandeng()     //停车后慢闪
+  73          {
+  74   1        CompareR=0;
+  75   1        CompareL=0;
+  76   1        while(1)
+  77   1        {
+  78   2          LED=0;
+  79   2          Delay(500);
+  80   2          LED=1;
+  81   2          Delay(500);
+  82   2          if(Key()!=0)
+  83   2          {
+  84   3            return;
+  85   3          }
+  86   2        }
+  87   1      }
+  88          
+  89          void xunji()      //循迹
+  90          {
+  91   1        if(P3_0==0 ||P3_1==0||P3_2==0 )
+  92   1        {
+  93   2          CompareR=0;   //右转
+  94   2          CompareL=Speed;
+  95   2        }
+  96   1        else if(P3_5==0 ||P3_6==0||P3_7==0 )
+  97   1        {
+  98   2          CompareR=Speed;   //左转
+  99   2          CompareL=0;
+ 100   2        }
+ 101   1        else
+ 102   1        {
+ 103   2          CompareR=Speed;   //直行
+ 104   2          CompareL=Speed;
+ 105   2        }
+ 106   1      }
+ 107          
+ 108          void chaoshengbo_init()   //超声波，定时器1计时
+ 109          {
+ 110   1        TMOD &= 0x0F;
+ 111   1        TMOD |= 0x10;
+ 112   1        TR1=0;
+ 113   1        Trig=0;
+ 114   1      }
+ 115          
+ 116          unsigned char chaoshengbo() //测距
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 16:30:40 PAGE 3   
+
+ 117          {
+ 118   1        unsigned int n;
+ 119   1        
+ 120   1        Trig=1;
+ 121   1        Delay(1);
+ 122   1        Trig=0;
+ 123   1        
+ 124   1        n=0;
+ 125   1        while(Echo==0)    //等回波
+ 126   1        {
+ 127   2          n++;
+ 128   2          if(n>5000)  //没有障碍
+ 129   2          {
+ 130   3            juli=99;
+ 131   3            return juli;
+ 132   3          }
+ 133   2        }
+ 134   1        
+ 135   1        TH1=0;
+ 136   1        TL1=0;
+ 137   1        TR1=1;
+ 138   1        n=0;
+ 139   1        while(Echo==1)
+ 140   1        {
+ 141   2          n++;
+ 142   2          if(n>5000)
+ 143   2          {
+ 144   3            break;
+ 145   3          }
+ 146   2        }
+ 147   1        TR1=0;
+ 148   1        
+ 149   1        juli=(TH1*256+TL1)/58;  //1us对应1/58cm
+ 150   1        return juli;
+ 151   1      }
+ 152          
+ 153          void renwu1()     //任务1：外圈一圈
+ 154          {
+ 155   1        Speed=100;
+ 156   1        CompareR=Speed;
+ 157   1        CompareL=Speed;
+ 158   1        LED=0;
+ 159   1        likai=0;
+ 160   1        duanming();
+ 161   1        while(1)
+ 162   1        {
+ 163   2          xunji();
+ 164   2          if(P3==0) //全黑，压到A点线
+ 165   2          {
+ 166   3            if(likai==1)
+ 167   3            {
+ 168   4              CompareR=0;
+ 169   4              CompareL=0;
+ 170   4              fengmingqi();
+ 171   4              LED=1;
+ 172   4              shandeng();
+ 173   4              return;
+ 174   4            }
+ 175   3          }
+ 176   2          else
+ 177   2          {
+ 178   3            likai=1;
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 16:30:40 PAGE 4   
+
+ 179   3          }
+ 180   2        }
+ 181   1      }
+ 182          
+ 183          void renwu2()     //任务2：外圈-内圈-外圈
+ 184          {
+ 185   1        Speed=100;
+ 186   1        CompareR=Speed;
+ 187   1        CompareL=Speed;
+ 188   1        quanshu=1;
+ 189   1        likai=0;
+ 190   1        LED=1;
+ 191   1        duanming();
+ 192   1        while(1)
+ 193   1        {
+ 194   2          xunji();
+ 195   2          
+ 196   2          if((P3_0==0)&&(P3_3==0||P3_4==0)) //B点分岔
+ 197   2          {
+ 198   3            if(quanshu==2)      //内圈要提前右拐
+ 199   3            {
+ 200   4              CompareR=0;
+ 201   4              CompareL=Speed;
+ 202   4              Delay(300); //转弯时间
+ 203   4            }
+ 204   3          }
+ 205   2          
+ 206   2          if(P3==0) //A点线
+ 207   2          {
+ 208   3            if(likai==1)
+ 209   3            {
+ 210   4              quanshu++;
+ 211   4              if(quanshu==2)    //第二圈走内圈
+ 212   4              {
+ 213   5                LED=0;
+ 214   5                duanming();
+ 215   5              }
+ 216   4              if(quanshu==3)    //第三圈走外圈
+ 217   4              {
+ 218   5                LED=1;
+ 219   5              }
+ 220   4              if(quanshu==4)    //三圈跑完
+ 221   4              {
+ 222   5                CompareR=0;
+ 223   5                CompareL=0;
+ 224   5                fengmingqi();
+ 225   5                LED=1;
+ 226   5                shandeng();
+ 227   5                return;
+ 228   5              }
+ 229   4            }
+ 230   3          }
+ 231   2          else
+ 232   2          {
+ 233   3            likai=1;
+ 234   3          }
+ 235   2        }
+ 236   1      }
+ 237          
+ 238          void renwu3()     //任务3：等停指示，停5秒再走
+ 239          {
+ 240   1        unsigned char i;
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 16:30:40 PAGE 5   
+
+ 241   1        
+ 242   1        Speed=100;
+ 243   1        CompareR=Speed;
+ 244   1        CompareL=Speed;
+ 245   1        LED=0;
+ 246   1        likai=0;
+ 247   1        tingguo=0;
+ 248   1        duanming();
+ 249   1        while(1)
+ 250   1        {
+ 251   2          xunji();
+ 252   2          if(P3==0) //压到横线
+ 253   2          {
+ 254   3            if(likai==1)
+ 255   3            {
+ 256   4              if(tingguo==0)    //第一次是等停线
+ 257   4              {
+ 258   5                CompareR=0;
+ 259   5                CompareL=0;
+ 260   5                for(i=0;i<25;i++) //5秒，声光提示
+ 261   5                {
+ 262   6                  fmq=0;
+ 263   6                  LED=0;
+ 264   6                  Delay(100);
+ 265   6                  fmq=1;
+ 266   6                  LED=1;
+ 267   6                  Delay(100);
+ 268   6                }
+ 269   5                tingguo=1;
+ 270   5                Speed=100;
+ 271   5              }
+ 272   4              else      //第二次是A点线
+ 273   4              {
+ 274   5                CompareR=0;
+ 275   5                CompareL=0;
+ 276   5                fengmingqi();
+ 277   5                LED=1;
+ 278   5                shandeng();
+ 279   5                return;
+ 280   5              }
+ 281   4            }
+ 282   3          }
+ 283   2          else
+ 284   2          {
+ 285   3            likai=1;
+ 286   3          }
+ 287   2        }
+ 288   1      }
+ 289          
+ 290          void renwu4()     //任务4：超声波避障
+ 291          {
+ 292   1        Speed=100;
+ 293   1        CompareR=Speed;
+ 294   1        CompareL=Speed;
+ 295   1        LED=0;
+ 296   1        likai=0;
+ 297   1        chaoshengbo_init();
+ 298   1        duanming();
+ 299   1        while(1)
+ 300   1        {
+ 301   2          xunji();
+ 302   2          
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 16:30:40 PAGE 6   
+
+ 303   2          chaoshengbo();
+ 304   2          if(juli<30)   //30cm内减速
+ 305   2          {
+ 306   3            Speed=50;
+ 307   3          }
+ 308   2          else
+ 309   2          {
+ 310   3            Speed=100;
+ 311   3          }
+ 312   2          
+ 313   2          if(juli<20)   //20cm内停车报警
+ 314   2          {
+ 315   3            Speed=0;
+ 316   3            CompareR=0;
+ 317   3            CompareL=0;
+ 318   3            while(1)
+ 319   3            {
+ 320   4              fmq=0;
+ 321   4              LED=0;
+ 322   4              Delay(100);
+ 323   4              fmq=1;
+ 324   4              LED=1;
+ 325   4              Delay(100);
+ 326   4              chaoshengbo();
+ 327   4              if(juli>30) //障碍移除继续
+ 328   4              {
+ 329   5                Speed=100;
+ 330   5                break;
+ 331   5              }
+ 332   4            }
+ 333   3          }
+ 334   2          
+ 335   2          if(P3==0)   //A点线，跑完一圈
+ 336   2          {
+ 337   3            if(likai==1)
+ 338   3            {
+ 339   4              CompareR=0;
+ 340   4              CompareL=0;
+ 341   4              fengmingqi();
+ 342   4              LED=0;
+ 343   4              while(1);
+ 344   4            }
+ 345   3          }
+ 346   2          else
+ 347   2          {
+ 348   3            likai=1;
+ 349   3          }
+ 350   2        }
+ 351   1      }
+ 352          
+ 353          void tiaosu()     //键1~4选任务1~4
+ 354          {
+ 355   1        Timer0_Init();
+ 356   1        Speed=0;
+ 357   1        CompareR=0;
+ 358   1        CompareL=0;
+ 359   1        LED=1;
+ 360   1        while(1)
+ 361   1        {
+ 362   2          KeyNum=Key();
+ 363   2          if(KeyNum==1)
+ 364   2          {
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 16:30:40 PAGE 7   
+
+ 365   3            renwu1();
+ 366   3          }
+ 367   2          else if(KeyNum==2)
+ 368   2          {
+ 369   3            renwu2();
+ 370   3          }
+ 371   2          else if(KeyNum==3)
+ 372   2          {
+ 373   3            renwu3();
+ 374   3          }
+ 375   2          else if(KeyNum==4)
+ 376   2          {
+ 377   3            renwu4();
+ 378   3          }
+ 379   2        }
+ 380   1      }
+ 381          
+ 382          void main()
+ 383          {
+ 384   1        MotorR=0;
+ 385   1        MotorL=0;
+ 386   1        
+ 387   1        tiaosu();
+ 388   1        
+ 389   1      }
+ 390          
+ 391          void Timer0_Routine() interrupt 1
+ 392          {
+ 393   1        TL0 = 0x9C;
+ 394   1        TH0 = 0xFF;
+ 395   1        Counter++;
+ 396   1        Counter%=100;
+ 397   1        if(Counter<CompareR)  //右轮
+ 398   1        {
+ 399   2          MotorR=1;
+ 400   2        }
+ 401   1        else
+ 402   1        {
+ 403   2          MotorR=0;
+ 404   2        }
+ 405   1        if(Counter<CompareL)  //左轮
+ 406   1        {
+ 407   2          MotorL=1;
+ 408   2        }
+ 409   1        else
+ 410   1        {
+ 411   2          MotorL=0;
+ 412   2        }
+ 413   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    763    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      2    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
