@@ -324,7 +324,31 @@ void renwu4()			//任务4：超声波避障
 	duanming();
 	while(1)
 	{
-		xunji();
+		if((P3_3==0 || P3_4==0)&&(P3_7==0||P3_6==0)&&P3_0==1)	//分叉
+		{
+			CompareR=Speed;
+			CompareL=Speed;
+			Delay(300);	//直走时间
+		}
+		else if((P3_0==0 ||P3_1==0||P3_2==0)&&(P3_7==1) )
+		{
+			CompareR=0;		//右转
+			CompareL=Speed;
+		}
+		else if((P3_5==0 ||P3_6==0||P3_7==0)&&(P3_0==1) )
+		{
+			CompareR=Speed;		//左转
+			CompareL=0;
+		}
+
+		else
+		{
+			CompareL=Speed;
+			CompareR=Speed;
+		}
+
+
+
 		
 		chaoshengbo();
 		if(juli<30)		//30cm内减速
