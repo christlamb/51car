@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 21:36:40 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:02:23 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -22,7 +22,7 @@ line level    source
   12          int quanshu=1;          //圈数
   13          unsigned char juli;       //超声波距离，cm
   14          bit likai;          //已离开A点
-  15          bit tingguo;          //已等停过
+  15          int tingguo;          //已等停过
   16          
   17          void Delay(unsigned int xms)
   18          {
@@ -62,7 +62,7 @@ line level    source
   52   1        TR0 = 1;
   53   1        ET0=1;
   54   1        EA=1;
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 21:36:40 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:02:23 PAGE 2   
 
   55   1        PT0=0;
   56   1      }
@@ -126,7 +126,7 @@ line level    source
  114   1      }
  115          
  116          unsigned char chaoshengbo() //测距
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 21:36:40 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:02:23 PAGE 3   
 
  117          {
  118   1        unsigned int n;
@@ -190,7 +190,7 @@ line level    source
  176   3            Delay(300); //直走时间
  177   3          }
  178   2          else if(P3_0==0 ||P3_1==0||P3_2==0 )
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 21:36:40 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:02:23 PAGE 4   
 
  179   2          {
  180   3            CompareR=0;   //右转
@@ -254,7 +254,7 @@ line level    source
  238   4            }
  239   3          
  240   3          }
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 21:36:40 PAGE 5   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:02:23 PAGE 5   
 
  241   2      
  242   2          else if((P3_3==0 || P3_4==0)&&(P3_7==0||P3_6==0)&&P3_0==1)  //B点分岔
@@ -293,185 +293,184 @@ line level    source
  275   1        duanming();
  276   1        while(1)
  277   1        {
- 278   2          xunji();
- 279   2          if(P3==0)
- 280   2          {
- 281   3            if(likai==1)
- 282   3            {
- 283   4              if(tingguo==0)    //第一次是等停线
- 284   4              {
- 285   5                CompareR=0;
- 286   5                CompareL=0;
- 287   5                for(i=0;i<25;i++) //5秒，声光提示
- 288   5                {
- 289   6                  fmq=0;
- 290   6                  LED=0;
- 291   6                  Delay(100);
- 292   6                  fmq=1;
- 293   6                  LED=1;
- 294   6                  Delay(100);
- 295   6                }
- 296   5                tingguo=1;
- 297   5                Speed=100;
- 298   5              }
- 299   4              else      //第二次是A点线
- 300   4              {
- 301   5                CompareR=0;
- 302   5                CompareL=0;
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 21:36:40 PAGE 6   
+ 278   2          if(P3==0 && tingguo==0)
+ 279   2          {
+ 280   3            CompareR=0;
+ 281   3            CompareL=0;
+ 282   3            for(i=0;i<15;i++) //5秒，声光提示
+ 283   3            {
+ 284   4              fmq=0;
+ 285   4              LED=0;
+ 286   4              Delay(100);
+ 287   4              fmq=1;
+ 288   4              LED=1;
+ 289   4              Delay(100);
+ 290   4            }
+ 291   3            Speed=100;
+ 292   3            tingguo=1;
+ 293   3          }
+ 294   2          else if(P3==0&&tingguo==1)
+ 295   2          {
+ 296   3            while(P3==0);
+ 297   3            tingguo++;
+ 298   3          }
+ 299   2          else if(P3==0&&tingguo==2)      //第二次是A点线
+ 300   2          {
+ 301   3            CompareR=0;
+ 302   3            CompareL=0;
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:02:23 PAGE 6   
 
- 303   5                fengmingqi();
- 304   5                LED=1;
- 305   5                shandeng();
- 306   5                return;
- 307   5              }
- 308   4            }
- 309   3          }
- 310   2          else
- 311   2          {
- 312   3            likai=1;
- 313   3          }
- 314   2        }
- 315   1      }
- 316          
- 317          void renwu4()     //任务4：超声波避障
- 318          {
- 319   1        Speed=100;
- 320   1        CompareR=Speed;
- 321   1        CompareL=Speed;
- 322   1        LED=0;
- 323   1        likai=0;
- 324   1        chaoshengbo_init();
- 325   1        duanming();
- 326   1        while(1)
- 327   1        {
- 328   2          xunji();
- 329   2          
- 330   2          chaoshengbo();
- 331   2          if(juli<30)   //30cm内减速
- 332   2          {
- 333   3            Speed=50;
- 334   3          }
- 335   2          else
- 336   2          {
- 337   3            Speed=100;
- 338   3          }
- 339   2          
- 340   2          if(juli<20)   //20cm内停车报警
- 341   2          {
- 342   3            Speed=0;
- 343   3            CompareR=0;
- 344   3            CompareL=0;
- 345   3            while(1)
- 346   3            {
- 347   4              fmq=0;
- 348   4              LED=0;
- 349   4              Delay(100);
- 350   4              fmq=1;
- 351   4              LED=1;
- 352   4              Delay(100);
- 353   4              chaoshengbo();
- 354   4              if(juli>30) //障碍移除继续
- 355   4              {
- 356   5                Speed=100;
- 357   5                break;
- 358   5              }
- 359   4            }
- 360   3          }
- 361   2          
- 362   2          if(P3==0)   //A点线，跑完一圈
- 363   2          {
- 364   3            if(likai==1)
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 21:36:40 PAGE 7   
+ 303   3            fengmingqi();
+ 304   3            LED=1;
+ 305   3            shandeng();
+ 306   3            return;
+ 307   3          }
+ 308   2          else
+ 309   2          {
+ 310   3            xunji();
+ 311   3          }
+ 312   2        }
+ 313   1      }
+ 314          
+ 315          
+ 316          void renwu4()     //任务4：超声波避障
+ 317          {
+ 318   1        Speed=100;
+ 319   1        CompareR=Speed;
+ 320   1        CompareL=Speed;
+ 321   1        LED=0;
+ 322   1        likai=0;
+ 323   1        chaoshengbo_init();
+ 324   1        duanming();
+ 325   1        while(1)
+ 326   1        {
+ 327   2          xunji();
+ 328   2          
+ 329   2          chaoshengbo();
+ 330   2          if(juli<30)   //30cm内减速
+ 331   2          {
+ 332   3            Speed=50;
+ 333   3          }
+ 334   2          else
+ 335   2          {
+ 336   3            Speed=100;
+ 337   3          }
+ 338   2          
+ 339   2          if(juli<20)   //20cm内停车报警
+ 340   2          {
+ 341   3            Speed=0;
+ 342   3            CompareR=0;
+ 343   3            CompareL=0;
+ 344   3            while(1)
+ 345   3            {
+ 346   4              fmq=0;
+ 347   4              LED=0;
+ 348   4              Delay(100);
+ 349   4              fmq=1;
+ 350   4              LED=1;
+ 351   4              Delay(100);
+ 352   4              chaoshengbo();
+ 353   4              if(juli>30) //障碍移除继续
+ 354   4              {
+ 355   5                Speed=100;
+ 356   5                break;
+ 357   5              }
+ 358   4            }
+ 359   3          }
+ 360   2          
+ 361   2          if(P3==0)   //A点线，跑完一圈
+ 362   2          {
+ 363   3            if(likai==1)
+ 364   3            {
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:02:23 PAGE 7   
 
- 365   3            {
- 366   4              CompareR=0;
- 367   4              CompareL=0;
- 368   4              fengmingqi();
- 369   4              LED=0;
- 370   4              while(1);
- 371   4            }
- 372   3          }
- 373   2          else
- 374   2          {
- 375   3            likai=1;
- 376   3          }
- 377   2        }
- 378   1      }
- 379          
- 380          void tiaosu()     //按键选择
- 381          {
- 382   1        Timer0_Init();
- 383   1        Speed=0;
- 384   1        CompareR=0;
- 385   1        CompareL=0;
- 386   1        LED=1;
- 387   1        while(1)
- 388   1        {
- 389   2          KeyNum=Key();
- 390   2          if(KeyNum==1)
- 391   2          {
- 392   3            renwu1();
- 393   3          }
- 394   2          else if(KeyNum==2)
- 395   2          {
- 396   3            renwu2();
- 397   3          }
- 398   2          else if(KeyNum==3)
- 399   2          {
- 400   3            renwu3();
- 401   3          }
- 402   2          else if(KeyNum==4)
- 403   2          {
- 404   3            renwu4();
- 405   3          }
- 406   2        }
- 407   1      }
- 408          
- 409          void main()
- 410          {
- 411   1        MotorR=0;
- 412   1        MotorL=0;
- 413   1        
- 414   1        tiaosu();
- 415   1        
- 416   1      }
- 417          
- 418          void Timer0_Routine() interrupt 1
- 419          {
- 420   1        TL0 = 0x9C;
- 421   1        TH0 = 0xFF;
- 422   1        Counter++;
- 423   1        Counter%=100;
- 424   1        if(Counter<CompareR)  //右轮
- 425   1        {
- 426   2          MotorR=1;
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 21:36:40 PAGE 8   
+ 365   4              CompareR=0;
+ 366   4              CompareL=0;
+ 367   4              fengmingqi();
+ 368   4              LED=0;
+ 369   4              while(1);
+ 370   4            }
+ 371   3          }
+ 372   2          else
+ 373   2          {
+ 374   3            likai=1;
+ 375   3          }
+ 376   2        }
+ 377   1      }
+ 378          
+ 379          void tiaosu()     //按键选择
+ 380          {
+ 381   1        Timer0_Init();
+ 382   1        Speed=0;
+ 383   1        CompareR=0;
+ 384   1        CompareL=0;
+ 385   1        LED=1;
+ 386   1        while(1)
+ 387   1        {
+ 388   2          KeyNum=Key();
+ 389   2          if(KeyNum==1)
+ 390   2          {
+ 391   3            renwu1();
+ 392   3          }
+ 393   2          else if(KeyNum==2)
+ 394   2          {
+ 395   3            renwu2();
+ 396   3          }
+ 397   2          else if(KeyNum==3)
+ 398   2          {
+ 399   3            renwu3();
+ 400   3          }
+ 401   2          else if(KeyNum==4)
+ 402   2          {
+ 403   3            renwu4();
+ 404   3          }
+ 405   2        }
+ 406   1      }
+ 407          
+ 408          void main()
+ 409          {
+ 410   1        MotorR=0;
+ 411   1        MotorL=0;
+ 412   1        
+ 413   1        tiaosu();
+ 414   1        
+ 415   1      }
+ 416          
+ 417          void Timer0_Routine() interrupt 1
+ 418          {
+ 419   1        TL0 = 0x9C;
+ 420   1        TH0 = 0xFF;
+ 421   1        Counter++;
+ 422   1        Counter%=100;
+ 423   1        if(Counter<CompareR)  //右轮
+ 424   1        {
+ 425   2          MotorR=1;
+ 426   2        }
+C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:02:23 PAGE 8   
 
- 427   2        }
- 428   1        else
- 429   1        {
- 430   2          MotorR=0;
- 431   2        }
- 432   1        if(Counter<CompareL)  //左轮
- 433   1        {
- 434   2          MotorL=1;
- 435   2        }
- 436   1        else
- 437   1        {
- 438   2          MotorL=0;
- 439   2        }
- 440   1      }
+ 427   1        else
+ 428   1        {
+ 429   2          MotorR=0;
+ 430   2        }
+ 431   1        if(Counter<CompareL)  //左轮
+ 432   1        {
+ 433   2          MotorL=1;
+ 434   2        }
+ 435   1        else
+ 436   1        {
+ 437   2          MotorL=0;
+ 438   2        }
+ 439   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    854    ----
+   CODE SIZE        =    896    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      8    ----
+   DATA SIZE        =     10    ----
    IDATA SIZE       =   ----    ----
-   BIT SIZE         =      2    ----
+   BIT SIZE         =      1    ----
 END OF MODULE INFORMATION.
 
 

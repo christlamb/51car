@@ -12,7 +12,7 @@ unsigned char KeyNum,Speed;			//按键号、速度
 int quanshu=1;					//圈数
 unsigned char juli;				//超声波距离，cm
 bit likai;					//已离开A点
-bit tingguo;					//已等停过
+int tingguo;					//已等停过
 
 void Delay(unsigned int xms)
 {
@@ -275,44 +275,43 @@ void renwu3()			//任务3：等停指示，停5秒再走
 	duanming();
 	while(1)
 	{
-		xunji();
-		if(P3==0)
+		if(P3==0 && tingguo==0)
 		{
-			if(likai==1)
+			CompareR=0;
+			CompareL=0;
+			for(i=0;i<15;i++)	//5秒，声光提示
 			{
-				if(tingguo==0)		//第一次是等停线
-				{
-					CompareR=0;
-					CompareL=0;
-					for(i=0;i<25;i++)	//5秒，声光提示
-					{
-						fmq=0;
-						LED=0;
-						Delay(100);
-						fmq=1;
-						LED=1;
-						Delay(100);
-					}
-					tingguo=1;
-					Speed=100;
-				}
-				else			//第二次是A点线
-				{
-					CompareR=0;
-					CompareL=0;
-					fengmingqi();
-					LED=1;
-					shandeng();
-					return;
-				}
+				fmq=0;
+				LED=0;
+				Delay(100);
+				fmq=1;
+				LED=1;
+				Delay(100);
 			}
+			Speed=100;
+			tingguo=1;
+		}
+		else if(P3==0&&tingguo==1)
+		{
+			while(P3==0);
+			tingguo++;
+		}
+		else if(P3==0&&tingguo==2)			//第二次是A点线
+		{
+			CompareR=0;
+			CompareL=0;
+			fengmingqi();
+			LED=1;
+			shandeng();
+			return;
 		}
 		else
 		{
-			likai=1;
+			xunji();
 		}
 	}
 }
+
 
 void renwu4()			//任务4：超声波避障
 {
