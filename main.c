@@ -88,12 +88,12 @@ void shandeng()			//停车后慢闪
 
 void xunji()			//循迹
 {
-	if(P3_0==0 ||P3_1==0||P3_2==0 )
+	if((P3_0==0 ||P3_1==0||P3_2==0 )&&(P3_7==1))
 	{
 		CompareR=0;		//右转
 		CompareL=Speed;
 	}
-	else if(P3_5==0 ||P3_6==0||P3_7==0 )
+	else if((P3_5==0 ||P3_6==0||P3_7==0 )&&(P3_0==1))
 	{
 		CompareR=Speed;		//左转
 		CompareL=0;
@@ -202,51 +202,62 @@ void renwu2()			//任务2：外圈-内圈-外圈
 	CompareR=Speed;
 	CompareL=Speed;
 	quanshu=1;
-	likai=0;
+	//likai=0;
 	LED=1;
 	duanming();
 	while(1)
-	{
-		xunji();
-		
-		if((P3_0==0)&&(P3_3==0||P3_4==0))	//B点分岔
-		{
-			if(quanshu==2)			//内圈要提前右拐
-			{
-				CompareR=0;
-				CompareL=Speed;
-				Delay(300);	//转弯时间
-			}
-		}
-		
+	{	
+	yikaishi:
 		if(P3==0)	//A点线
 		{
-			if(likai==1)
+			while(P3==0)
 			{
-				quanshu++;
-				if(quanshu==2)		//第二圈走内圈
-				{
-					LED=0;
-					duanming();
-				}
-				if(quanshu==3)		//第三圈走外圈
-				{
-					LED=1;
-				}
-				if(quanshu==4)		//三圈跑完
-				{
-					CompareR=0;
-					CompareL=0;
-					fengmingqi();
-					LED=1;
-					shandeng();
-					return;
-				}
+				CompareL=Speed;
+				CompareR=Speed;
+			}
+			quanshu++;
+			if(quanshu==2)		//第二圈走内圈
+			{
+				LED=0;
+				duanming();
+				goto yikaishi;
+			}
+			else if(quanshu==3)		//第三圈走外圈
+			{
+				LED=1;
+
+			}
+			else if(quanshu==4)		//三圈跑完
+			{
+				CompareR=0;
+				CompareL=0;
+				fengmingqi();
+				LED=1;
+				shandeng();
+				return;
+			}
+		
+		}
+
+		else if((P3_3==0 || P3_4==0)&&(P3_7==0||P3_6==0)&&P3_0==1)	//B点分岔
+		{
+			if(quanshu==2)			//内圈
+			{
+				CompareL=0;
+				CompareR=Speed;
+				Delay(200);	//转弯时间
+			}
+			else
+			{
+				CompareL=Speed;
+				CompareR=Speed;
 			}
 		}
+		
+
 		else
 		{
-			likai=1;
+			xunji();
 		}
 	}
 }
