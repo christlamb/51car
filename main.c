@@ -29,24 +29,7 @@ void tiaosu()
 			Compare=100;
 			while (1)
 			{
-				if(P3_0==0 ||P3_1==0||P3_2==0 )
-				{
-					MotorR=0;//右转
-				}
-				else if(P3_5==0 ||P3_6==0||P3_7==0 )
-				{
-					MotorL=0;//左转
-				}
-				else if(P3==0)
-				{
-					Compare=0;
-				}
-				
-				else if(P3==1)
-				{
-					fengmingqi();
-				}
-				else if((P3_0==0)&&(P3_3==0||P3_4==0)&&(quanshu==2))
+				if((P3_0==0)&&(P3_3==0||P3_4==0)&&(quanshu==2))
 				{
 					while((P3_0==0)&&(P3_3==0||P3_4==0))
 					{
@@ -64,6 +47,24 @@ void tiaosu()
 						MotorL=1;
 					}
 				}
+				else if(P3_0==0 ||P3_1==0||P3_2==0 )
+				{
+					MotorR=0;//右转
+				}
+				else if(P3_5==0 ||P3_6==0||P3_7==0 )
+				{
+					MotorL=0;//左转
+				}
+				else if(P3==0)
+				{
+					Compare=0;
+				}
+				
+				else if(P3==1)
+				{
+					fengmingqi();
+				}
+
 				else
 				{
 					MotorR=1;
