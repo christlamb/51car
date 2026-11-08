@@ -160,23 +160,39 @@ void renwu1()			//任务1：外圈一圈
 	duanming();
 	while(1)
 	{
-		xunji();
 		if(P3==0)	//全黑，压到A点线
 		{
-			if(likai==1)
-			{
-				CompareR=0;
-				CompareL=0;
-				fengmingqi();
-				LED=1;
-				shandeng();
-				return;
-			}
+			CompareR=0;
+			CompareL=0;
+			fengmingqi();
+			LED=1;
+			shandeng();
+			return;
 		}
+		else if((P3_3==0 || P3_4==0)&&(P3_7==0||P3_6==0)&&P3_0==1)	//分叉
+		{
+			CompareR=Speed;
+			CompareL=Speed;
+			Delay(300);	//直走时间
+		}
+		else if(P3_0==0 ||P3_1==0||P3_2==0 )
+		{
+			CompareR=0;		//右转
+			CompareL=Speed;
+		}
+		else if(P3_5==0 ||P3_6==0||P3_7==0 )
+		{
+			CompareR=Speed;		//左转
+			CompareL=0;
+		}
+
 		else
 		{
-			likai=1;
+			CompareL=Speed;
+			CompareR=Speed;
 		}
+
+
 	}
 }
 
@@ -249,7 +265,7 @@ void renwu3()			//任务3：等停指示，停5秒再走
 	while(1)
 	{
 		xunji();
-		if(P3==0)	//压到横线
+		if(P3==0)
 		{
 			if(likai==1)
 			{
@@ -350,7 +366,7 @@ void renwu4()			//任务4：超声波避障
 	}
 }
 
-void tiaosu()			//键1~4选任务1~4
+void tiaosu()			//按键选择
 {
 	Timer0_Init();
 	Speed=0;
