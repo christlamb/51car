@@ -19,8 +19,8 @@ void Delay(unsigned int xms)
 	unsigned char i, j;
 	while(xms--)
 	{
-		i = 2;
-		j = 239;
+		i = 11;
+		j = 190;
 		do
 		{
 			while (--j);
