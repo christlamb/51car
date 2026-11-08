@@ -28,7 +28,7 @@ void Delay(unsigned int xms)
 	}
 }
 
-//键1~4：P2_7、P2_6、P2_5、P2_4（P3_2、P3_3与巡线探头冲突）
+//键1~4：P2_7、P2_6、P2_5、P2_4
 unsigned char Key()
 {
 	unsigned char KeyNumber=0;
@@ -41,7 +41,7 @@ unsigned char Key()
 	return KeyNumber;
 }
 
-//定时器0，100us@12MHz
+//定时器0，100us@11.0592MHz
 void Timer0_Init()
 {
 	TMOD &= 0xF0;
@@ -69,7 +69,7 @@ void duanming()			//短鸣1声
 	fmq=1;
 }
 
-void shandeng()			//停车后慢闪，按任意键返回
+void shandeng()			//停车后慢闪
 {
 	CompareR=0;
 	CompareL=0;
@@ -86,7 +86,7 @@ void shandeng()			//停车后慢闪，按任意键返回
 	}
 }
 
-void xunji()			//循迹走一步
+void xunji()			//循迹
 {
 	if(P3_0==0 ||P3_1==0||P3_2==0 )
 	{
@@ -113,7 +113,7 @@ void chaoshengbo_init()		//超声波，定时器1计时
 	Trig=0;
 }
 
-unsigned char chaoshengbo()	//测一次距离，cm
+unsigned char chaoshengbo()	//测距
 {
 	unsigned int n;
 	
@@ -125,7 +125,7 @@ unsigned char chaoshengbo()	//测一次距离，cm
 	while(Echo==0)		//等回波
 	{
 		n++;
-		if(n>5000)	//没回波就当没障碍
+		if(n>5000)	//没有障碍
 		{
 			juli=99;
 			return juli;
@@ -199,7 +199,7 @@ void renwu2()			//任务2：外圈-内圈-外圈
 			{
 				CompareR=0;
 				CompareL=Speed;
-				Delay(300);		//按场地调
+				Delay(300);	//转弯时间
 			}
 		}
 		
