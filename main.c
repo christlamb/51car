@@ -125,7 +125,7 @@ unsigned char chaoshengbo()	//测距
 	while(Echo==0)		//等回波
 	{
 		n++;
-		if(n>5000)	//没有障碍
+		if(n>400)	//没有障碍
 		{
 			juli=99;
 			return juli;
@@ -139,7 +139,7 @@ unsigned char chaoshengbo()	//测距
 	while(Echo==1)
 	{
 		n++;
-		if(n>5000)
+		if(n>400)
 		{
 			break;
 		}
@@ -155,7 +155,7 @@ void renwu1()			//任务1：外圈一圈
 	Speed=100;
 	CompareR=Speed;
 	CompareL=Speed;
-	LED=0;
+	LED=1;
 	likai=0;
 	duanming();
 	while(1)

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:27:10 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/09/2026 19:28:00 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   52   1        TR0 = 1;
   53   1        ET0=1;
   54   1        EA=1;
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:27:10 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/09/2026 19:28:00 PAGE 2   
 
   55   1        PT0=0;
   56   1      }
@@ -126,7 +126,7 @@ line level    source
  114   1      }
  115          
  116          unsigned char chaoshengbo() //测距
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:27:10 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/09/2026 19:28:00 PAGE 3   
 
  117          {
  118   1        unsigned int n;
@@ -139,7 +139,7 @@ line level    source
  125   1        while(Echo==0)    //等回波
  126   1        {
  127   2          n++;
- 128   2          if(n>5000)  //没有障碍
+ 128   2          if(n>400) //没有障碍
  129   2          {
  130   3            juli=99;
  131   3            return juli;
@@ -153,7 +153,7 @@ line level    source
  139   1        while(Echo==1)
  140   1        {
  141   2          n++;
- 142   2          if(n>5000)
+ 142   2          if(n>400)
  143   2          {
  144   3            break;
  145   3          }
@@ -169,7 +169,7 @@ line level    source
  155   1        Speed=100;
  156   1        CompareR=Speed;
  157   1        CompareL=Speed;
- 158   1        LED=0;
+ 158   1        LED=1;
  159   1        likai=0;
  160   1        duanming();
  161   1        while(1)
@@ -190,7 +190,7 @@ line level    source
  176   3            Delay(300); //直走时间
  177   3          }
  178   2          else if(P3_0==0 ||P3_1==0||P3_2==0 )
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:27:10 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/09/2026 19:28:00 PAGE 4   
 
  179   2          {
  180   3            CompareR=0;   //右转
@@ -254,7 +254,7 @@ line level    source
  238   4            }
  239   3          
  240   3          }
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:27:10 PAGE 5   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/09/2026 19:28:00 PAGE 5   
 
  241   2      
  242   2          else if((P3_3==0 || P3_4==0)&&(P3_7==0||P3_6==0)&&P3_0==1)  //B点分岔
@@ -318,7 +318,7 @@ line level    source
  300   2          {
  301   3            CompareR=0;
  302   3            CompareL=0;
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:27:10 PAGE 6   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/09/2026 19:28:00 PAGE 6   
 
  303   3            fengmingqi();
  304   3            LED=1;
@@ -382,7 +382,7 @@ line level    source
  362   2          
  363   2          if(juli<20)   //20cm内停车报警
  364   2          {
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:27:10 PAGE 7   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/09/2026 19:28:00 PAGE 7   
 
  365   3            Speed=0;
  366   3            CompareR=0;
@@ -446,7 +446,7 @@ line level    source
  424   3          }
  425   2          else if(KeyNum==4)
  426   2          {
-C51 COMPILER V9.60.7.0   MAIN                                                              11/08/2026 22:27:10 PAGE 8   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/09/2026 19:28:00 PAGE 8   
 
  427   3            renwu4();
  428   3          }
