@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:15:56 PAGE 1   
+C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:39:36 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE RENWU
@@ -62,7 +62,7 @@ line level    source
   52          {
   53   1        A_Line_Flag=0;
   54   1        Speed=100;
-C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:15:56 PAGE 2   
+C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:39:36 PAGE 2   
 
   55   1        CompareR=Speed;
   56   1        CompareL=Speed;
@@ -80,209 +80,213 @@ line level    source
   68   3            {
   69   4              CompareL=Speed;
   70   4              CompareR=Speed;
-  71   4            }
-  72   3            quanshu++;
-  73   3            if(quanshu==2)    //第二圈走内圈
-  74   3            {
-  75   4              LED=0;
-  76   4              duanming();
-  77   4              goto yikaishi;
-  78   4            }
-  79   3            else if(quanshu==3)   //第三圈走外圈
-  80   3            {
-  81   4              LED=1;
-  82   4      
-  83   4            }
-  84   3            else if(quanshu==4)   //三圈跑完
-  85   3            {
-  86   4              CompareR=0;
-  87   4              CompareL=0;
-  88   4              fengmingqi();
-  89   4              LED=1;
-  90   4              shandeng();
-  91   4              return;
-  92   4            }
-  93   3          
-  94   3          }
-  95   2      
-  96   2          else if((P3_3==0 || P3_4==0)&&(P3_7==0||P3_6==0)&&P3_0==1)  //B点分岔
-  97   2          {
-  98   3            if(quanshu==2)      //内圈
-  99   3            {
- 100   4              CompareL=0;
- 101   4              CompareR=Speed;
- 102   4              Delay(200); //转弯时间
- 103   4            }
- 104   3            else
- 105   3            {
- 106   4              CompareL=Speed;
- 107   4              CompareR=Speed;
- 108   4            }
- 109   3          }
- 110   2          
- 111   2      
- 112   2          else
- 113   2          {
- 114   3            xunji();
- 115   3          }
- 116   2        }
-C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:15:56 PAGE 3   
+  71   4              goto yikaishi;
+  72   4            }
+  73   3            quanshu++;
+  74   3            if(quanshu==2)    //第二圈走内圈
+  75   3            {
+  76   4              LED=0;
+  77   4              duanming();
+  78   4              goto yikaishi;
+  79   4            }
+  80   3            else if(quanshu==3)   //第三圈走外圈
+  81   3            {
+  82   4              LED=1;
+  83   4              goto yikaishi;
+  84   4            }
+  85   3            else if(quanshu==4)   //三圈跑完
+  86   3            {
+  87   4              CompareR=0;
+  88   4              CompareL=0;
+  89   4              fengmingqi();
+  90   4              LED=1;
+  91   4              shandeng();
+  92   4              return;
+  93   4            }
+  94   3          
+  95   3          }
+  96   2      
+  97   2          else if((P3_3==0 || P3_4==0)&&(P3_7==0||P3_6==0)&&P3_0==1)  //B点分岔
+  98   2          {
+  99   3            if(quanshu==2)      //内圈
+ 100   3            {
+ 101   4              CompareL=0;
+ 102   4              CompareR=Speed;
+ 103   4              Delay(200); //转弯时间
+ 104   4              goto yikaishi;
+ 105   4            }
+ 106   3            else
+ 107   3            {
+ 108   4              CompareL=Speed;
+ 109   4              CompareR=Speed;
+ 110   4              goto yikaishi;
+ 111   4            }
+ 112   3          }
+ 113   2          
+ 114   2      
+ 115   2          else
+ 116   2          {
+C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:39:36 PAGE 3   
 
- 117   1      }
- 118          
- 119          void renwu3()     //任务3：等停指示，停5秒再走
- 120          {
- 121   1        unsigned char i;
- 122   1        
- 123   1        A_Line_Flag=0;
- 124   1        Speed=100;
- 125   1        CompareR=Speed;
- 126   1        CompareL=Speed;
- 127   1        LED=0;
- 128   1        likai=0;
- 129   1        tingguo=0;
- 130   1        duanming();
- 131   1        while(1)
- 132   1        {
- 133   2          if(A_Line_Flag && tingguo==0)
- 134   2          {
- 135   3            A_Line_Flag=0;
- 136   3            CompareR=0;
- 137   3            CompareL=0;
- 138   3            for(i=0;i<15;i++) //5秒，声光提示
- 139   3            {
- 140   4              fmq=0;
- 141   4              LED=0;
- 142   4              Delay(100);
- 143   4              fmq=1;
- 144   4              LED=1;
- 145   4              Delay(100);
- 146   4            }
- 147   3            Speed=100;
- 148   3            tingguo=1;
- 149   3          }
- 150   2          else if(A_Line_Flag&&tingguo==1)
- 151   2          {
- 152   3            A_Line_Flag=0;
- 153   3            CompareR=Speed;
- 154   3            CompareL=Speed;
- 155   3            while(A_Line_On);
- 156   3            tingguo++;
- 157   3          }
- 158   2          else if(A_Line_Flag&&tingguo==2)      //第二次是A点线
- 159   2          {
- 160   3            A_Line_Flag=0;
- 161   3            CompareR=0;
- 162   3            CompareL=0;
- 163   3            fengmingqi();
- 164   3            LED=1;
- 165   3            shandeng();
- 166   3            return;
- 167   3          }
- 168   2          else
- 169   2          {
- 170   3            xunji();
+ 117   3            xunji();
+ 118   3            goto yikaishi;
+ 119   3          }
+ 120   2        }
+ 121   1      }
+ 122          
+ 123          void renwu3()     //任务3：等停指示，停5秒再走
+ 124          {
+ 125   1        unsigned char i;
+ 126   1        
+ 127   1        A_Line_Flag=0;
+ 128   1        Speed=100;
+ 129   1        CompareR=Speed;
+ 130   1        CompareL=Speed;
+ 131   1        LED=0;
+ 132   1        likai=0;
+ 133   1        tingguo=0;
+ 134   1        duanming();
+ 135   1        while(1)
+ 136   1        {
+ 137   2          if(A_Line_Flag && tingguo==0)
+ 138   2          {
+ 139   3            A_Line_Flag=0;
+ 140   3            CompareR=0;
+ 141   3            CompareL=0;
+ 142   3            for(i=0;i<15;i++) //5秒，声光提示
+ 143   3            {
+ 144   4              fmq=0;
+ 145   4              LED=0;
+ 146   4              Delay(100);
+ 147   4              fmq=1;
+ 148   4              LED=1;
+ 149   4              Delay(100);
+ 150   4            }
+ 151   3            Speed=100;
+ 152   3            tingguo=1;
+ 153   3          }
+ 154   2          else if(A_Line_Flag&&tingguo==1)
+ 155   2          {
+ 156   3            A_Line_Flag=0;
+ 157   3            CompareR=Speed;
+ 158   3            CompareL=Speed;
+ 159   3            while(A_Line_On);
+ 160   3            tingguo++;
+ 161   3          }
+ 162   2          else if(A_Line_Flag&&tingguo==2)      //第二次是A点线
+ 163   2          {
+ 164   3            A_Line_Flag=0;
+ 165   3            CompareR=0;
+ 166   3            CompareL=0;
+ 167   3            fengmingqi();
+ 168   3            LED=1;
+ 169   3            shandeng();
+ 170   3            return;
  171   3          }
- 172   2        }
- 173   1      }
- 174          
- 175          
- 176          void renwu4()     //任务4：超声波避障
- 177          {
- 178   1        A_Line_Flag=0;
-C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:15:56 PAGE 4   
+ 172   2          else
+ 173   2          {
+ 174   3            xunji();
+ 175   3          }
+ 176   2        }
+ 177   1      }
+ 178          
+C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:39:36 PAGE 4   
 
- 179   1        Speed=100;
- 180   1        CompareR=Speed;
- 181   1        CompareL=Speed;
- 182   1        LED=0;
- 183   1        likai=0;
- 184   1        chaoshengbo_init();
- 185   1        duanming();
- 186   1        while(1)
- 187   1        {
- 188   2          if((P3_3==0 || P3_4==0)&&(P3_7==0||P3_6==0)&&P3_0==1) //分叉
- 189   2          {
- 190   3            CompareR=Speed;
- 191   3            CompareL=Speed;
- 192   3            Delay(300); //直走时间
- 193   3          }
- 194   2          else if((P3_0==0 ||P3_1==0||P3_2==0)&&(P3_7==1) )
- 195   2          {
- 196   3            CompareR=0;   //右转
- 197   3            CompareL=Speed;
- 198   3          }
- 199   2          else if((P3_5==0 ||P3_6==0||P3_7==0)&&(P3_0==1) )
- 200   2          {
- 201   3            CompareR=Speed;   //左转
- 202   3            CompareL=0;
- 203   3          }
- 204   2      
- 205   2          else
- 206   2          {
- 207   3            CompareL=Speed;
- 208   3            CompareR=Speed;
- 209   3          }
- 210   2      
- 211   2      
- 212   2      
- 213   2          
- 214   2          chaoshengbo();
- 215   2          if(juli<30)   //30cm内减速
- 216   2          {
- 217   3            Speed=50;
- 218   3          }
- 219   2          else
+ 179          
+ 180          void renwu4()     //任务4：超声波避障
+ 181          {
+ 182   1        A_Line_Flag=0;
+ 183   1        Speed=100;
+ 184   1        CompareR=Speed;
+ 185   1        CompareL=Speed;
+ 186   1        LED=0;
+ 187   1        likai=0;
+ 188   1        chaoshengbo_init();
+ 189   1        duanming();
+ 190   1        while(1)
+ 191   1        {
+ 192   2          if((P3_3==0 || P3_4==0)&&(P3_7==0||P3_6==0)&&P3_0==1) //分叉
+ 193   2          {
+ 194   3            CompareR=Speed;
+ 195   3            CompareL=Speed;
+ 196   3            Delay(150); //直走时间
+ 197   3          }
+ 198   2          else if((P3_0==0 ||P3_1==0||P3_2==0)&&(P3_7==1) )
+ 199   2          {
+ 200   3            CompareR=0;   //右转
+ 201   3            CompareL=Speed;
+ 202   3          }
+ 203   2          else if((P3_5==0 ||P3_6==0||P3_7==0)&&(P3_0==1) )
+ 204   2          {
+ 205   3            CompareR=Speed;   //左转
+ 206   3            CompareL=0;
+ 207   3          }
+ 208   2      
+ 209   2          else
+ 210   2          {
+ 211   3            CompareL=Speed;
+ 212   3            CompareR=Speed;
+ 213   3          }
+ 214   2      
+ 215   2      
+ 216   2      
+ 217   2          
+ 218   2          chaoshengbo();
+ 219   2          if(juli<30)   //30cm内减速
  220   2          {
- 221   3            Speed=100;
+ 221   3            Speed=50;
  222   3          }
- 223   2          
- 224   2          if(juli<20)   //20cm内停车报警
- 225   2          {
- 226   3            Speed=0;
- 227   3            CompareR=0;
- 228   3            CompareL=0;
- 229   3            while(1)
- 230   3            {
- 231   4              fmq=0;
- 232   4              LED=0;
- 233   4              Delay(100);
- 234   4              fmq=1;
- 235   4              LED=1;
- 236   4              Delay(100);
- 237   4              chaoshengbo();
- 238   4              if(juli>30) //障碍移除继续
- 239   4              {
- 240   5                Speed=100;
-C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:15:56 PAGE 5   
+ 223   2          else
+ 224   2          {
+ 225   3            Speed=100;
+ 226   3          }
+ 227   2          
+ 228   2          if(juli<20)   //20cm内停车报警
+ 229   2          {
+ 230   3            Speed=0;
+ 231   3            CompareR=0;
+ 232   3            CompareL=0;
+ 233   3            while(1)
+ 234   3            {
+ 235   4              fmq=0;
+ 236   4              LED=0;
+ 237   4              Delay(100);
+ 238   4              fmq=1;
+ 239   4              LED=1;
+ 240   4              Delay(100);
+C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:39:36 PAGE 5   
 
- 241   5                break;
- 242   5              }
- 243   4            }
- 244   3          }
- 245   2          
- 246   2          if(A_Line_Flag)   //A点线，跑完一圈
- 247   2          {
- 248   3            A_Line_Flag=0;
- 249   3            if(likai==1)
- 250   3            {
- 251   4              CompareR=0;
- 252   4              CompareL=0;
- 253   4              fengmingqi();
- 254   4              LED=0;
- 255   4              while(1);
- 256   4            }
- 257   3          }
- 258   2          else if(A_Line_On==0)
- 259   2          {
- 260   3            likai=1;
+ 241   4              chaoshengbo();
+ 242   4              if(juli>30) //障碍移除继续
+ 243   4              {
+ 244   5                Speed=100;
+ 245   5                break;
+ 246   5              }
+ 247   4            }
+ 248   3          }
+ 249   2          
+ 250   2          if(A_Line_Flag)   //A点线，跑完一圈
+ 251   2          {
+ 252   3            A_Line_Flag=0;
+ 253   3            if(likai==1)
+ 254   3            {
+ 255   4              CompareR=0;
+ 256   4              CompareL=0;
+ 257   4              fengmingqi();
+ 258   4              LED=0;
+ 259   4              while(1);
+ 260   4            }
  261   3          }
- 262   2        }
- 263   1      }
+ 262   2          else if(A_Line_On==0)
+ 263   2          {
+ 264   3            likai=1;
+ 265   3          }
+ 266   2        }
+ 267   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    601    ----
+   CODE SIZE        =    595    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

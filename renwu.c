@@ -68,6 +68,7 @@ void renwu2()			//任务2：外圈-内圈-外圈
 			{
 				CompareL=Speed;
 				CompareR=Speed;
+				goto yikaishi;
 			}
 			quanshu++;
 			if(quanshu==2)		//第二圈走内圈
@@ -79,7 +80,7 @@ void renwu2()			//任务2：外圈-内圈-外圈
 			else if(quanshu==3)		//第三圈走外圈
 			{
 				LED=1;
-
+				goto yikaishi;
 			}
 			else if(quanshu==4)		//三圈跑完
 			{
@@ -100,11 +101,13 @@ void renwu2()			//任务2：外圈-内圈-外圈
 				CompareL=0;
 				CompareR=Speed;
 				Delay(200);	//转弯时间
+				goto yikaishi;
 			}
 			else
 			{
 				CompareL=Speed;
 				CompareR=Speed;
+				goto yikaishi;
 			}
 		}
 		
@@ -112,6 +115,7 @@ void renwu2()			//任务2：外圈-内圈-外圈
 		else
 		{
 			xunji();
+			goto yikaishi;
 		}
 	}
 }
@@ -189,7 +193,7 @@ void renwu4()			//任务4：超声波避障
 		{
 			CompareR=Speed;
 			CompareL=Speed;
-			Delay(300);	//直走时间
+			Delay(150);	//直走时间
 		}
 		else if((P3_0==0 ||P3_1==0||P3_2==0)&&(P3_7==1) )
 		{
