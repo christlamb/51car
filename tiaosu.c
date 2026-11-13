@@ -1,0 +1,68 @@
+#include "global.h"
+
+//定时器0，100us@11.0592MHz
+void Timer0_Init()
+{
+	TMOD &= 0xF0;
+	TMOD |= 0x01;
+	TL0 = 0x9C;
+	TH0 = 0xFF;
+	TF0 = 0;
+	TR0 = 1;
+	ET0=1;
+	EA=1;
+	PT0=0;
+}
+
+void tiaosu()			//按键选择
+{
+	Timer0_Init();
+	Speed=0;
+	CompareR=0;
+	CompareL=0;
+	LED=1;
+	while(1)
+	{
+		KeyNum=Key();
+		if(KeyNum==1)
+		{
+			renwu1();
+		}
+		else if(KeyNum==2)
+		{
+			renwu2();
+		}
+		else if(KeyNum==3)
+		{
+			renwu3();
+		}
+		else if(KeyNum==4)
+		{
+			renwu4();
+		}
+	}
+}
+
+void Timer0_Routine() interrupt 1
+{
+	TL0 = 0x9C;
+	TH0 = 0xFF;
+	Counter++;
+	Counter%=100;
+	if(Counter<CompareR)	//右轮
+	{
+		MotorR=1;
+	}
+	else
+	{
+		MotorR=0;
+	}
+	if(Counter<CompareL)	//左轮
+	{
+		MotorL=1;
+	}
+	else
+	{
+		MotorL=0;
+	}
+}

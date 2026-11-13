@@ -386,6 +386,41 @@
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
             </File>
+            <File>
+              <FileName>global.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\global.c</FilePath>
+            </File>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\key.c</FilePath>
+            </File>
+            <File>
+              <FileName>chaoshengbo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\chaoshengbo.c</FilePath>
+            </File>
+            <File>
+              <FileName>renwu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\renwu.c</FilePath>
+            </File>
+            <File>
+              <FileName>tiaosu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\tiaosu.c</FilePath>
+            </File>
+            <File>
+              <FileName>others.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\others.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
