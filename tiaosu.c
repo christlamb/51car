@@ -1,5 +1,8 @@
 #include "global.h"
 
+static unsigned char LineOffCnt=0;
+static unsigned char LineReady=1;
+
 //定时器0，100us@11.0592MHz
 void Timer0_Init()
 {
@@ -64,5 +67,27 @@ void Timer0_Routine() interrupt 1
 	else
 	{
 		MotorL=0;
+	}
+	if(P3==0)
+	{
+		if(LineReady==1)
+		{
+			A_Line_Flag=1;
+			LineReady=0;
+		}
+		A_Line_On=1;
+		LineOffCnt=0;
+	}
+	else
+	{
+		A_Line_On=0;
+		if(LineOffCnt<255)
+		{
+			LineOffCnt++;
+		}
+		if(LineOffCnt>30)
+		{
+			LineReady=1;
+		}
 	}
 }

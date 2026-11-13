@@ -16,6 +16,7 @@ extern int quanshu;
 extern unsigned char juli;
 extern bit likai;
 extern int tingguo;
+extern volatile unsigned char A_Line_Flag,A_Line_On;
 
 void Delay(unsigned int xms);
 unsigned char Key();

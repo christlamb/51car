@@ -1,4 +1,11 @@
 ".\Objects\STARTUP.obj",
-".\Objects\main.obj" 
+".\Objects\main.obj",
+".\Objects\global.obj",
+".\Objects\delay.obj",
+".\Objects\key.obj",
+".\Objects\chaoshengbo.obj",
+".\Objects\renwu.obj",
+".\Objects\tiaosu.obj",
+".\Objects\others.obj" 
 TO ".\Objects\51car" 
 PRINT(".\Listings\51car.m51") RAMSIZE(256) 

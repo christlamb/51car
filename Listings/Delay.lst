@@ -1,13 +1,39 @@
-C51 COMPILER V9.60.7.0   DELAY                                                             11/08/2026 16:30:40 PAGE 1   
+C51 COMPILER V9.60.7.0   DELAY                                                             11/13/2026 20:15:56 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE DELAY
-OBJECT MODULE PLACED IN .\Objects\Delay.obj
-COMPILER INVOKED BY: E:\software\Keil5\C51\BIN\C51.EXE Delay.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
-                    -ngs\Delay.lst) TABS(2) OBJECT(.\Objects\Delay.obj)
+OBJECT MODULE PLACED IN .\Objects\delay.obj
+COMPILER INVOKED BY: E:\software\Keil5\C51\BIN\C51.EXE delay.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
+                    -ngs\delay.lst) TABS(2) OBJECT(.\Objects\delay.obj)
 
 line level    source
 
-*** ERROR C318 OF Delay.c: can't open file 'Delay.c'
+   1          #include "global.h"
+   2          
+   3          void Delay(unsigned int xms)
+   4          {
+   5   1        unsigned char i, j;
+   6   1        while(xms--)
+   7   1        {
+   8   2          i = 2;
+   9   2          j = 201;
+  10   2          do
+  11   2          {
+  12   3            while (--j);
+  13   3          } while (--i);
+  14   2        }
+  15   1      }
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  1 ERROR(S)
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     21    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

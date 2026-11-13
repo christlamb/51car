@@ -2,6 +2,7 @@
 
 void renwu1()			//任务1：外圈一圈
 {
+	A_Line_Flag=0;
 	Speed=100;
 	CompareR=Speed;
 	CompareL=Speed;
@@ -10,8 +11,9 @@ void renwu1()			//任务1：外圈一圈
 	duanming();
 	while(1)
 	{
-		if(P3==0)	//全黑，压到A点线
+		if(A_Line_Flag)	//全黑，压到A点线
 		{
+			A_Line_Flag=0;
 			CompareR=0;
 			CompareL=0;
 			fengmingqi();
@@ -48,6 +50,7 @@ void renwu1()			//任务1：外圈一圈
 
 void renwu2()			//任务2：外圈-内圈-外圈
 {
+	A_Line_Flag=0;
 	Speed=100;
 	CompareR=Speed;
 	CompareL=Speed;
@@ -58,9 +61,10 @@ void renwu2()			//任务2：外圈-内圈-外圈
 	while(1)
 	{	
 	yikaishi:
-		if(P3==0)	//A点线
+		if(A_Line_Flag)	//A点线
 		{
-			while(P3==0)
+			A_Line_Flag=0;
+			while(A_Line_On)
 			{
 				CompareL=Speed;
 				CompareR=Speed;
@@ -116,6 +120,7 @@ void renwu3()			//任务3：等停指示，停5秒再走
 {
 	unsigned char i;
 	
+	A_Line_Flag=0;
 	Speed=100;
 	CompareR=Speed;
 	CompareL=Speed;
@@ -125,8 +130,9 @@ void renwu3()			//任务3：等停指示，停5秒再走
 	duanming();
 	while(1)
 	{
-		if(P3==0 && tingguo==0)
+		if(A_Line_Flag && tingguo==0)
 		{
+			A_Line_Flag=0;
 			CompareR=0;
 			CompareL=0;
 			for(i=0;i<15;i++)	//5秒，声光提示
@@ -141,13 +147,17 @@ void renwu3()			//任务3：等停指示，停5秒再走
 			Speed=100;
 			tingguo=1;
 		}
-		else if(P3==0&&tingguo==1)
+		else if(A_Line_Flag&&tingguo==1)
 		{
-			while(P3==0);
+			A_Line_Flag=0;
+			CompareR=Speed;
+			CompareL=Speed;
+			while(A_Line_On);
 			tingguo++;
 		}
-		else if(P3==0&&tingguo==2)			//第二次是A点线
+		else if(A_Line_Flag&&tingguo==2)			//第二次是A点线
 		{
+			A_Line_Flag=0;
 			CompareR=0;
 			CompareL=0;
 			fengmingqi();
@@ -165,6 +175,7 @@ void renwu3()			//任务3：等停指示，停5秒再走
 
 void renwu4()			//任务4：超声波避障
 {
+	A_Line_Flag=0;
 	Speed=100;
 	CompareR=Speed;
 	CompareL=Speed;
@@ -232,8 +243,9 @@ void renwu4()			//任务4：超声波避障
 			}
 		}
 		
-		if(P3==0)		//A点线，跑完一圈
+		if(A_Line_Flag)		//A点线，跑完一圈
 		{
+			A_Line_Flag=0;
 			if(likai==1)
 			{
 				CompareR=0;
@@ -243,7 +255,7 @@ void renwu4()			//任务4：超声波避障
 				while(1);
 			}
 		}
-		else
+		else if(A_Line_On==0)
 		{
 			likai=1;
 		}

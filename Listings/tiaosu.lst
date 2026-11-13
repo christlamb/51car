@@ -1,0 +1,119 @@
+C51 COMPILER V9.60.7.0   TIAOSU                                                            11/13/2026 20:15:57 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TIAOSU
+OBJECT MODULE PLACED IN .\Objects\tiaosu.obj
+COMPILER INVOKED BY: E:\software\Keil5\C51\BIN\C51.EXE tiaosu.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\tiaosu.lst) TABS(2) OBJECT(.\Objects\tiaosu.obj)
+
+line level    source
+
+   1          #include "global.h"
+   2          
+   3          static unsigned char LineOffCnt=0;
+   4          static unsigned char LineReady=1;
+   5          
+   6          //定时器0，100us@11.0592MHz
+   7          void Timer0_Init()
+   8          {
+   9   1        TMOD &= 0xF0;
+  10   1        TMOD |= 0x01;
+  11   1        TL0 = 0x9C;
+  12   1        TH0 = 0xFF;
+  13   1        TF0 = 0;
+  14   1        TR0 = 1;
+  15   1        ET0=1;
+  16   1        EA=1;
+  17   1        PT0=0;
+  18   1      }
+  19          
+  20          void tiaosu()     //按键选择
+  21          {
+  22   1        Timer0_Init();
+  23   1        Speed=0;
+  24   1        CompareR=0;
+  25   1        CompareL=0;
+  26   1        LED=1;
+  27   1        while(1)
+  28   1        {
+  29   2          KeyNum=Key();
+  30   2          if(KeyNum==1)
+  31   2          {
+  32   3            renwu1();
+  33   3          }
+  34   2          else if(KeyNum==2)
+  35   2          {
+  36   3            renwu2();
+  37   3          }
+  38   2          else if(KeyNum==3)
+  39   2          {
+  40   3            renwu3();
+  41   3          }
+  42   2          else if(KeyNum==4)
+  43   2          {
+  44   3            renwu4();
+  45   3          }
+  46   2        }
+  47   1      }
+  48          
+  49          void Timer0_Routine() interrupt 1
+  50          {
+  51   1        TL0 = 0x9C;
+  52   1        TH0 = 0xFF;
+  53   1        Counter++;
+  54   1        Counter%=100;
+C51 COMPILER V9.60.7.0   TIAOSU                                                            11/13/2026 20:15:57 PAGE 2   
+
+  55   1        if(Counter<CompareR)  //右轮
+  56   1        {
+  57   2          MotorR=1;
+  58   2        }
+  59   1        else
+  60   1        {
+  61   2          MotorR=0;
+  62   2        }
+  63   1        if(Counter<CompareL)  //左轮
+  64   1        {
+  65   2          MotorL=1;
+  66   2        }
+  67   1        else
+  68   1        {
+  69   2          MotorL=0;
+  70   2        }
+  71   1        if(P3==0)
+  72   1        {
+  73   2          if(LineReady==1)
+  74   2          {
+  75   3            A_Line_Flag=1;
+  76   3            LineReady=0;
+  77   3          }
+  78   2          A_Line_On=1;
+  79   2          LineOffCnt=0;
+  80   2        }
+  81   1        else
+  82   1        {
+  83   2          A_Line_On=0;
+  84   2          if(LineOffCnt<255)
+  85   2          {
+  86   3            LineOffCnt++;
+  87   3          }
+  88   2          if(LineOffCnt>30)
+  89   2          {
+  90   3            LineReady=1;
+  91   3          }
+  92   2        }
+  93   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    181    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,295 @@
+C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:15:56 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE RENWU
+OBJECT MODULE PLACED IN .\Objects\renwu.obj
+COMPILER INVOKED BY: E:\software\Keil5\C51\BIN\C51.EXE renwu.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
+                    -ngs\renwu.lst) TABS(2) OBJECT(.\Objects\renwu.obj)
+
+line level    source
+
+   1          #include "global.h"
+   2          
+   3          void renwu1()     //任务1：外圈一圈
+   4          {
+   5   1        A_Line_Flag=0;
+   6   1        Speed=100;
+   7   1        CompareR=Speed;
+   8   1        CompareL=Speed;
+   9   1        LED=1;
+  10   1        likai=0;
+  11   1        duanming();
+  12   1        while(1)
+  13   1        {
+  14   2          if(A_Line_Flag) //全黑，压到A点线
+  15   2          {
+  16   3            A_Line_Flag=0;
+  17   3            CompareR=0;
+  18   3            CompareL=0;
+  19   3            fengmingqi();
+  20   3            LED=1;
+  21   3            shandeng();
+  22   3            return;
+  23   3          }
+  24   2          else if((P3_3==0 || P3_4==0)&&(P3_7==0||P3_6==0)&&P3_0==1)  //分叉
+  25   2          {
+  26   3            CompareR=Speed;
+  27   3            CompareL=Speed;
+  28   3            Delay(300); //直走时间
+  29   3          }
+  30   2          else if(P3_0==0 ||P3_1==0||P3_2==0 )
+  31   2          {
+  32   3            CompareR=0;   //右转
+  33   3            CompareL=Speed;
+  34   3          }
+  35   2          else if(P3_5==0 ||P3_6==0||P3_7==0 )
+  36   2          {
+  37   3            CompareR=Speed;   //左转
+  38   3            CompareL=0;
+  39   3          }
+  40   2      
+  41   2          else
+  42   2          {
+  43   3            CompareL=Speed;
+  44   3            CompareR=Speed;
+  45   3          }
+  46   2      
+  47   2      
+  48   2        }
+  49   1      }
+  50          
+  51          void renwu2()     //任务2：外圈-内圈-外圈
+  52          {
+  53   1        A_Line_Flag=0;
+  54   1        Speed=100;
+C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:15:56 PAGE 2   
+
+  55   1        CompareR=Speed;
+  56   1        CompareL=Speed;
+  57   1        quanshu=1;
+  58   1        //likai=0;
+  59   1        LED=1;
+  60   1        duanming();
+  61   1        while(1)
+  62   1        { 
+  63   2        yikaishi:
+  64   2          if(A_Line_Flag) //A点线
+  65   2          {
+  66   3            A_Line_Flag=0;
+  67   3            while(A_Line_On)
+  68   3            {
+  69   4              CompareL=Speed;
+  70   4              CompareR=Speed;
+  71   4            }
+  72   3            quanshu++;
+  73   3            if(quanshu==2)    //第二圈走内圈
+  74   3            {
+  75   4              LED=0;
+  76   4              duanming();
+  77   4              goto yikaishi;
+  78   4            }
+  79   3            else if(quanshu==3)   //第三圈走外圈
+  80   3            {
+  81   4              LED=1;
+  82   4      
+  83   4            }
+  84   3            else if(quanshu==4)   //三圈跑完
+  85   3            {
+  86   4              CompareR=0;
+  87   4              CompareL=0;
+  88   4              fengmingqi();
+  89   4              LED=1;
+  90   4              shandeng();
+  91   4              return;
+  92   4            }
+  93   3          
+  94   3          }
+  95   2      
+  96   2          else if((P3_3==0 || P3_4==0)&&(P3_7==0||P3_6==0)&&P3_0==1)  //B点分岔
+  97   2          {
+  98   3            if(quanshu==2)      //内圈
+  99   3            {
+ 100   4              CompareL=0;
+ 101   4              CompareR=Speed;
+ 102   4              Delay(200); //转弯时间
+ 103   4            }
+ 104   3            else
+ 105   3            {
+ 106   4              CompareL=Speed;
+ 107   4              CompareR=Speed;
+ 108   4            }
+ 109   3          }
+ 110   2          
+ 111   2      
+ 112   2          else
+ 113   2          {
+ 114   3            xunji();
+ 115   3          }
+ 116   2        }
+C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:15:56 PAGE 3   
+
+ 117   1      }
+ 118          
+ 119          void renwu3()     //任务3：等停指示，停5秒再走
+ 120          {
+ 121   1        unsigned char i;
+ 122   1        
+ 123   1        A_Line_Flag=0;
+ 124   1        Speed=100;
+ 125   1        CompareR=Speed;
+ 126   1        CompareL=Speed;
+ 127   1        LED=0;
+ 128   1        likai=0;
+ 129   1        tingguo=0;
+ 130   1        duanming();
+ 131   1        while(1)
+ 132   1        {
+ 133   2          if(A_Line_Flag && tingguo==0)
+ 134   2          {
+ 135   3            A_Line_Flag=0;
+ 136   3            CompareR=0;
+ 137   3            CompareL=0;
+ 138   3            for(i=0;i<15;i++) //5秒，声光提示
+ 139   3            {
+ 140   4              fmq=0;
+ 141   4              LED=0;
+ 142   4              Delay(100);
+ 143   4              fmq=1;
+ 144   4              LED=1;
+ 145   4              Delay(100);
+ 146   4            }
+ 147   3            Speed=100;
+ 148   3            tingguo=1;
+ 149   3          }
+ 150   2          else if(A_Line_Flag&&tingguo==1)
+ 151   2          {
+ 152   3            A_Line_Flag=0;
+ 153   3            CompareR=Speed;
+ 154   3            CompareL=Speed;
+ 155   3            while(A_Line_On);
+ 156   3            tingguo++;
+ 157   3          }
+ 158   2          else if(A_Line_Flag&&tingguo==2)      //第二次是A点线
+ 159   2          {
+ 160   3            A_Line_Flag=0;
+ 161   3            CompareR=0;
+ 162   3            CompareL=0;
+ 163   3            fengmingqi();
+ 164   3            LED=1;
+ 165   3            shandeng();
+ 166   3            return;
+ 167   3          }
+ 168   2          else
+ 169   2          {
+ 170   3            xunji();
+ 171   3          }
+ 172   2        }
+ 173   1      }
+ 174          
+ 175          
+ 176          void renwu4()     //任务4：超声波避障
+ 177          {
+ 178   1        A_Line_Flag=0;
+C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:15:56 PAGE 4   
+
+ 179   1        Speed=100;
+ 180   1        CompareR=Speed;
+ 181   1        CompareL=Speed;
+ 182   1        LED=0;
+ 183   1        likai=0;
+ 184   1        chaoshengbo_init();
+ 185   1        duanming();
+ 186   1        while(1)
+ 187   1        {
+ 188   2          if((P3_3==0 || P3_4==0)&&(P3_7==0||P3_6==0)&&P3_0==1) //分叉
+ 189   2          {
+ 190   3            CompareR=Speed;
+ 191   3            CompareL=Speed;
+ 192   3            Delay(300); //直走时间
+ 193   3          }
+ 194   2          else if((P3_0==0 ||P3_1==0||P3_2==0)&&(P3_7==1) )
+ 195   2          {
+ 196   3            CompareR=0;   //右转
+ 197   3            CompareL=Speed;
+ 198   3          }
+ 199   2          else if((P3_5==0 ||P3_6==0||P3_7==0)&&(P3_0==1) )
+ 200   2          {
+ 201   3            CompareR=Speed;   //左转
+ 202   3            CompareL=0;
+ 203   3          }
+ 204   2      
+ 205   2          else
+ 206   2          {
+ 207   3            CompareL=Speed;
+ 208   3            CompareR=Speed;
+ 209   3          }
+ 210   2      
+ 211   2      
+ 212   2      
+ 213   2          
+ 214   2          chaoshengbo();
+ 215   2          if(juli<30)   //30cm内减速
+ 216   2          {
+ 217   3            Speed=50;
+ 218   3          }
+ 219   2          else
+ 220   2          {
+ 221   3            Speed=100;
+ 222   3          }
+ 223   2          
+ 224   2          if(juli<20)   //20cm内停车报警
+ 225   2          {
+ 226   3            Speed=0;
+ 227   3            CompareR=0;
+ 228   3            CompareL=0;
+ 229   3            while(1)
+ 230   3            {
+ 231   4              fmq=0;
+ 232   4              LED=0;
+ 233   4              Delay(100);
+ 234   4              fmq=1;
+ 235   4              LED=1;
+ 236   4              Delay(100);
+ 237   4              chaoshengbo();
+ 238   4              if(juli>30) //障碍移除继续
+ 239   4              {
+ 240   5                Speed=100;
+C51 COMPILER V9.60.7.0   RENWU                                                             11/13/2026 20:15:56 PAGE 5   
+
+ 241   5                break;
+ 242   5              }
+ 243   4            }
+ 244   3          }
+ 245   2          
+ 246   2          if(A_Line_Flag)   //A点线，跑完一圈
+ 247   2          {
+ 248   3            A_Line_Flag=0;
+ 249   3            if(likai==1)
+ 250   3            {
+ 251   4              CompareR=0;
+ 252   4              CompareL=0;
+ 253   4              fengmingqi();
+ 254   4              LED=0;
+ 255   4              while(1);
+ 256   4            }
+ 257   3          }
+ 258   2          else if(A_Line_On==0)
+ 259   2          {
+ 260   3            likai=1;
+ 261   3          }
+ 262   2        }
+ 263   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    601    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

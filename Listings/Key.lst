@@ -1,13 +1,38 @@
-C51 COMPILER V9.60.7.0   KEY                                                               11/08/2026 16:30:41 PAGE 1   
+C51 COMPILER V9.60.7.0   KEY                                                               11/13/2026 20:15:56 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE KEY
-OBJECT MODULE PLACED IN .\Objects\Key.obj
-COMPILER INVOKED BY: E:\software\Keil5\C51\BIN\C51.EXE Key.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
-                    -s\Key.lst) TABS(2) OBJECT(.\Objects\Key.obj)
+OBJECT MODULE PLACED IN .\Objects\key.obj
+COMPILER INVOKED BY: E:\software\Keil5\C51\BIN\C51.EXE key.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\key.lst) TABS(2) OBJECT(.\Objects\key.obj)
 
 line level    source
 
-*** ERROR C318 OF Key.c: can't open file 'Key.c'
+   1          #include "global.h"
+   2          
+   3          //键1~4：P2_7、P2_6、P2_5、P2_4
+   4          unsigned char Key()
+   5          {
+   6   1        unsigned char KeyNumber=0;
+   7   1        
+   8   1        if(P2_7==0){Delay(20);while(P2_7==0);Delay(20);KeyNumber=1;}
+   9   1        if(P2_6==0){Delay(20);while(P2_6==0);Delay(20);KeyNumber=2;}
+  10   1        if(P2_5==0){Delay(20);while(P2_5==0);Delay(20);KeyNumber=3;}
+  11   1        if(P2_4==0){Delay(20);while(P2_4==0);Delay(20);KeyNumber=4;}
+  12   1        
+  13   1        return KeyNumber;
+  14   1      }
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  1 ERROR(S)
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     97    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
