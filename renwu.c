@@ -50,26 +50,24 @@ void renwu1()			//任务1：外圈一圈
 
 void renwu2()			//任务2：外圈-内圈-外圈
 {
-	A_Line_Flag=0;
+	unsigned char neiquan;
+	
 	Speed=100;
 	CompareR=Speed;
 	CompareL=Speed;
 	quanshu=1;
+	neiquan=0;
 	//likai=0;
 	LED=1;
 	duanming();
 	while(1)
 	{	
 	yikaishi:
-		if(A_Line_Flag)	//A点线
+		if(P3==0)	//A点线
 		{
-			A_Line_Flag=0;
-			while(A_Line_On)
-			{
-				CompareL=Speed;
-				CompareR=Speed;
-				goto yikaishi;
-			}
+			CompareL=Speed;
+			CompareR=Speed;
+			Delay(150);
 			quanshu++;
 			if(quanshu==2)		//第二圈走内圈
 			{
@@ -96,18 +94,17 @@ void renwu2()			//任务2：外圈-内圈-外圈
 
 		else if((P3_3==0 || P3_4==0)&&(P3_7==0||P3_6==0)&&P3_0==1)	//B点分岔
 		{
-			if(quanshu==2)			//内圈
+			if(quanshu==2 && (neiquan==0 || neiquan==1))			//内圈
 			{
 				CompareL=0;
 				CompareR=Speed;
+				neiquan++;
 				Delay(200);	//转弯时间
-				goto yikaishi;
 			}
 			else
 			{
 				CompareL=Speed;
 				CompareR=Speed;
-				goto yikaishi;
 			}
 		}
 		
@@ -115,10 +112,10 @@ void renwu2()			//任务2：外圈-内圈-外圈
 		else
 		{
 			xunji();
-			goto yikaishi;
 		}
 	}
 }
+
 
 void renwu3()			//任务3：等停指示，停5秒再走
 {
